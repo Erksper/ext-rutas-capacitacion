@@ -1,0 +1,17 @@
+{
+    "controller": "rutas-capacitacion:controllers/rutas-capacitacion-lista",
+    "iconClass": "fas fa-graduation-cap",
+    "color": "#B8A279",
+    "checkForDuplicatesInQuickCreate": false,
+    "menu": {
+        "list": [
+            {
+                "label": "Rutas de capacitación",
+                "link": "#RutasCapacitacionLista",
+                "acl": "read",
+                "aclScope": "RutasCapacitacionLista",
+                "iconClass": "fas fa-graduation-cap"
+            }
+        ]
+    }
+}

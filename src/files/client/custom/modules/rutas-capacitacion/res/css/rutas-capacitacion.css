@@ -1,0 +1,406 @@
+/* client/custom/modules/rutas-capacitacion/res/css/rutas-capacitacion.css */
+
+:root {
+    --rc-primary: #B8A279;
+    --rc-primary-dark: #9D8B5F;
+    --rc-primary-light: #D4C19C;
+    --rc-danger: #e74c3c;
+    --rc-dark: #1A1A1A;
+    --rc-light: #F5F5F5;
+    --rc-border: #E6E6E6;
+    --rc-white: #FFFFFF;
+    --rc-text: #363438;
+    --rc-text-muted: #666666;
+}
+
+/* Contenedor de la página */
+.rc-list-container {
+    padding: 30px;
+    background: var(--rc-light);
+    min-height: 100vh;
+}
+
+/* Header */
+.rc-page-header {
+    background: var(--rc-white);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border: 1px solid var(--rc-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.rc-header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.rc-header-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--rc-primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 26px;
+}
+
+.rc-page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--rc-dark);
+    margin: 0 0 4px 0;
+}
+
+.rc-page-subtitle {
+    color: var(--rc-text-muted);
+    font-size: 15px;
+    margin: 0;
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+.rc-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .rc-list-container { padding: 15px; }
+    .rc-page-title { font-size: 22px; }
+}
+
+/* Loading */
+.rc-loading {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.rc-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid var(--rc-border);
+    border-top-color: var(--rc-primary);
+    border-radius: 50%;
+    animation: rc-spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes rc-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Botones */
+.rc-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rc-btn-primary {
+    background: var(--rc-primary);
+    color: white;
+}
+.rc-btn-primary:hover {
+    background: var(--rc-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(184,162,121,0.3);
+}
+
+.rc-btn-secondary {
+    background: var(--rc-white);
+    color: var(--rc-text-muted);
+    border: 2px solid var(--rc-border);
+}
+.rc-btn-secondary:hover {
+    background: var(--rc-primary);
+    color: white;
+    border-color: var(--rc-primary);
+}
+
+/* Alertas */
+.rc-alert {
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.rc-alert-danger { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+
+/* Sin datos */
+.rc-no-data {
+    background: var(--rc-white);
+    border-radius: 12px;
+    padding: 60px 40px;
+    text-align: center;
+    border: 1px solid var(--rc-border);
+}
+.rc-no-data i {
+    font-size: 64px;
+    color: var(--rc-primary);
+    margin-bottom: 20px;
+    display: block;
+}
+.rc-no-data h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--rc-dark);
+    margin-bottom: 10px;
+}
+.rc-no-data p {
+    color: var(--rc-text-muted);
+    font-size: 16px;
+}
+
+.rc-empty-text {
+    color: var(--rc-text-muted);
+    font-style: italic;
+    font-size: 14px;
+}
+
+/* Grilla de rutas */
+.rc-rutas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.rc-ruta-card {
+    background: var(--rc-white);
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border: 1px solid var(--rc-border);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: all 0.2s ease;
+}
+
+.rc-ruta-card:hover {
+    box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+    transform: translateY(-2px);
+}
+
+.rc-ruta-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.rc-ruta-nombre {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--rc-dark);
+    margin-bottom: 4px;
+}
+
+.rc-ruta-descripcion {
+    font-size: 13.5px;
+    color: var(--rc-text-muted);
+    line-height: 1.4;
+}
+
+.rc-ruta-roles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.rc-ruta-role-tag {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    background: var(--rc-light);
+    color: var(--rc-text-muted);
+    padding: 3px 9px;
+    border-radius: 20px;
+}
+
+.rc-ruta-actions {
+    margin-top: auto;
+    display: flex;
+    gap: 8px;
+}
+
+.rc-ruta-actions .rc-btn {
+    flex: 1;
+    justify-content: center;
+}
+
+.rc-ruta-actions .rc-ruta-edit-btn {
+    flex: 0 0 auto;
+    width: 42px;
+    padding: 0;
+}
+
+.rc-ruta-sin-archivo {
+    color: var(--rc-text-muted);
+    font-size: 13px;
+    font-style: italic;
+    flex: 1;
+}
+
+/* Modal de subida / edición */
+.rc-modal-form .form-group {
+    margin-bottom: 18px;
+}
+
+.rc-modal-form label {
+    font-weight: 600;
+    color: var(--rc-text);
+    font-size: 13.5px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.rc-file-name {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--rc-primary-dark);
+    font-weight: 600;
+}
+
+/* Selector de roles en el modal */
+.rc-roles-selector-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.rc-roles-selector-header .rc-btn-link {
+    background: none;
+    border: none;
+    color: var(--rc-primary-dark);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+}
+
+.rc-roles-selector-header .rc-btn-link:hover {
+    text-decoration: underline;
+}
+
+.rc-roles-selector-lista {
+    display: block;
+    max-height: 220px;
+    overflow-y: auto;
+    border: 1px solid var(--rc-border);
+    border-radius: 8px;
+    padding: 6px;
+}
+
+.rc-rol-check-row {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--rc-text);
+}
+
+.rc-rol-check-row:hover {
+    background: var(--rc-light);
+}
+
+.rc-rol-check-row input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* Modal organizar / eliminar */
+.rc-organizar-hint {
+    font-size: 13px;
+    color: var(--rc-text-muted);
+    background: var(--rc-light);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+}
+
+.rc-organizar-lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.rc-organizar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--rc-white);
+    border: 1px solid var(--rc-border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: grab;
+    transition: box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.rc-organizar-row:active {
+    cursor: grabbing;
+}
+
+.rc-organizar-row.dragging {
+    opacity: 0.4;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.rc-organizar-handle {
+    color: var(--rc-text-muted);
+    font-size: 15px;
+}
+
+.rc-organizar-nombre {
+    flex: 1;
+    font-weight: 600;
+    color: var(--rc-text);
+    font-size: 14px;
+}
+
+.rc-organizar-eliminar {
+    border: none;
+    background: transparent;
+    color: var(--rc-danger);
+    font-size: 15px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.rc-organizar-eliminar:hover {
+    background: rgba(231, 76, 60, 0.1);
+}

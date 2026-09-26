@@ -1,9 +1,9 @@
 {
-    "module": "{@name}",
-    "name": "{@nameLabel}",
-    "description": "{@description}",
-    "author": "{@author}",
-    "bundled": {@bundled},
+    "module": "RutasCapacitacion",
+    "name": "Rutas Capacitacion",
+    "description": "Modulo para subir archivos de rutas de capacitacion.",
+    "author": "Sebastian Silva",
+    "bundled": true,
     "acceptableVersions": [
         ">=9.1.0"
     ],
