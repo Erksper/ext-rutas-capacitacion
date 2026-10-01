@@ -82,6 +82,7 @@ class RutasCapacitacionRutas
         try {
             $pdo     = $this->entityManager->getPDO();
             $siteUrl = rtrim($this->config->get('siteUrl', ''), '/');
+            $tipo    = $this->normalizarTipo($request->getQueryParam('tipo'));
 
             $rolesUsuario = $this->getRolesUsuario($this->user->get('id'), $pdo);
             $verTodo = $this->user->isAdmin() || in_array('casa nacional', $rolesUsuario);
@@ -98,11 +99,11 @@ class RutasCapacitacionRutas
                         a.type AS archivo_tipo
                     FROM rutas_capacitacion_rutas r
                     LEFT JOIN attachment a ON a.id = r.archivo_id AND a.deleted = 0
-                    WHERE r.deleted = 0
+                    WHERE r.deleted = 0 AND r.tipo = ?
                     ORDER BY r.orden ASC, r.created_at ASC";
 
             $sth = $pdo->prepare($sql);
-            $sth->execute();
+            $sth->execute([$tipo]);
             $rows = $sth->fetchAll(\PDO::FETCH_ASSOC);
 
             $lista = [];
@@ -158,6 +159,7 @@ class RutasCapacitacionRutas
             $nombre      = trim((string) ($_POST['nombre'] ?? $request->get('nombre', '')));
             $descripcion = trim((string) ($_POST['descripcion'] ?? $request->get('descripcion', '')));
             $rolesRaw    = (string) ($_POST['roles'] ?? $request->get('roles', ''));
+            $tipo        = $this->normalizarTipo($_POST['tipo'] ?? $request->get('tipo', ''));
 
             if ($nombre === '') {
                 throw new BadRequest("El nombre es obligatorio");
@@ -200,8 +202,8 @@ class RutasCapacitacionRutas
             }
 
             $pdo = $this->entityManager->getPDO();
-            $sth = $pdo->prepare("SELECT COALESCE(MAX(orden), 0) AS maxOrden FROM rutas_capacitacion_rutas WHERE deleted = 0");
-            $sth->execute();
+            $sth = $pdo->prepare("SELECT COALESCE(MAX(orden), 0) AS maxOrden FROM rutas_capacitacion_rutas WHERE deleted = 0 AND tipo = ?");
+            $sth->execute([$tipo]);
             $maxOrden = (int) $sth->fetch(\PDO::FETCH_ASSOC)['maxOrden'];
 
             $rolesLimpios = $this->normalizarRoles($rolesRaw);
@@ -210,6 +212,7 @@ class RutasCapacitacionRutas
             $ruta->set([
                 'nombre'      => $nombre,
                 'descripcion' => $descripcion,
+                'tipo'        => $tipo,
                 'roles'       => $rolesLimpios,
                 'archivoId'   => $attachmentId,
                 'orden'       => $maxOrden + 1,
@@ -455,6 +458,13 @@ class RutasCapacitacionRutas
         }
 
         return implode(',', $limpias);
+    }
+
+    // Solo 'rutas' o 'legales'; cualquier otra cosa cae a 'rutas' por seguridad
+    private function normalizarTipo($tipo)
+    {
+        $tipo = strtolower(trim((string) $tipo));
+        return $tipo === 'legales' ? 'legales' : 'rutas';
     }
 
     private function parseRoles($rolesStr)

@@ -1,8 +1,10 @@
 {
     "scopeNames": {
-        "RutasCapacitacionLista": "Rutas de capacitación"
+        "RutasCapacitacionLista": "Rutas de capacitación",
+        "RutasCapacitacionLegales": "Documentos legales"
     },
     "scopeNamesPlural": {
-        "RutasCapacitacionLista": "Rutas de capacitación"
+        "RutasCapacitacionLista": "Rutas de capacitación",
+        "RutasCapacitacionLegales": "Documentos legales"
     }
 }

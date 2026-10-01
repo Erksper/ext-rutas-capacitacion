@@ -1,21 +1,24 @@
-define("rutas-capacitacion:views/modals/subir-ruta", ["views/modal"], function (Dep) {
+define("rutas-capacitacion:views/modals/editar-documento-legal", ["views/modal"], function (Dep) {
     return Dep.extend({
-        template: "rutas-capacitacion:modals/subir-ruta",
+        template: "rutas-capacitacion:modals/editar-documento-legal",
 
-        cssName: "rc-modal-subir-ruta",
+        cssName: "dl-modal-editar-documento",
 
-        header: "Subir nueva ruta",
+        header: "Editar documento",
 
         backdrop: true,
 
-        subiendo: false,
+        guardando: false,
         rolesDisponibles: [],
 
         setup: function () {
+            this.documento = this.options.documento || {};
+            this.rolesActuales = this.documento.roles || [];
+
             this.buttonList = [
                 {
                     name: "guardar",
-                    label: "Guardar",
+                    label: "Guardar cambios",
                     style: "primary",
                     onClick: () => this.actionGuardar()
                 },
@@ -30,19 +33,20 @@ define("rutas-capacitacion:views/modals/subir-ruta", ["views/modal"], function (
         afterRender: function () {
             const self = this;
 
-            this.$el.find("#rc-ruta-file").on("change", function () {
+            this.$el.find("#dl-documento-nombre").val(this.documento.nombre || "");
+            this.$el.find("#dl-documento-descripcion").val(this.documento.descripcion || "");
+
+            if (this.documento.archivoNombre) {
+                this.$el.find("#dl-documento-archivo-actual").text("Archivo actual: " + this.documento.archivoNombre);
+            }
+
+            this.$el.find("#dl-documento-file").on("change", function () {
                 const file = this.files && this.files[0];
-                const nombreEl = self.$el.find("#rc-ruta-file-name");
-
-                if (!file) {
-                    nombreEl.text("");
-                    return;
-                }
-
-                nombreEl.text(file.name);
+                const nombreEl = self.$el.find("#dl-documento-file-name");
+                nombreEl.text(file ? file.name : "");
             });
 
-            this.$el.find("#rc-ruta-roles-toggle-todos").on("click", function () {
+            this.$el.find("#dl-documento-roles-toggle-todos").on("click", function () {
                 self.toggleTodosLosRoles();
             });
 
@@ -51,12 +55,12 @@ define("rutas-capacitacion:views/modals/subir-ruta", ["views/modal"], function (
 
         cargarRoles: function () {
             const self = this;
-            const $lista = this.$el.find("#rc-ruta-roles-lista");
+            const $lista = this.$el.find("#dl-documento-roles-lista");
 
             Espo.Ajax.getRequest("RutasCapacitacionRutas/action/getRolesDisponibles")
                 .then(function (response) {
                     if (!response.success) {
-                        $lista.html('<div class="rc-alert rc-alert-danger">' +
+                        $lista.html('<div class="dl-alert dl-alert-danger">' +
                             self.escapeHtml(response.error || 'No se pudieron cargar los roles') + '</div>');
                         return;
                     }
@@ -65,24 +69,25 @@ define("rutas-capacitacion:views/modals/subir-ruta", ["views/modal"], function (
                     self.renderRoles();
                 })
                 .catch(function () {
-                    $lista.html('<div class="rc-alert rc-alert-danger">Error de conexión</div>');
+                    $lista.html('<div class="dl-alert dl-alert-danger">Error de conexión</div>');
                 });
         },
 
         renderRoles: function () {
             const self = this;
-            const $lista = this.$el.find("#rc-ruta-roles-lista");
+            const $lista = this.$el.find("#dl-documento-roles-lista");
 
             if (this.rolesDisponibles.length === 0) {
-                $lista.html('<p class="rc-empty-text">No hay roles configurados en el sistema</p>');
+                $lista.html('<p class="dl-empty-text">No hay roles configurados en el sistema</p>');
                 return;
             }
 
             let html = '';
             this.rolesDisponibles.forEach(function (rol) {
+                const checked = self.rolesActuales.indexOf(rol.name) !== -1 ? 'checked' : '';
                 html += `
-                    <label class="rc-rol-check-row">
-                        <input type="checkbox" class="rc-ruta-rol-checkbox" value="${self.escapeHtml(rol.name)}">
+                    <label class="dl-rol-check-row">
+                        <input type="checkbox" class="dl-documento-rol-checkbox" value="${self.escapeHtml(rol.name)}" ${checked}>
                         <span>${self.escapeHtml(rol.name)}</span>
                     </label>
                 `;
@@ -92,29 +97,24 @@ define("rutas-capacitacion:views/modals/subir-ruta", ["views/modal"], function (
         },
 
         toggleTodosLosRoles: function () {
-            const $checks = this.$el.find(".rc-ruta-rol-checkbox");
+            const $checks = this.$el.find(".dl-documento-rol-checkbox");
             const todosMarcados = $checks.length > 0 && $checks.filter(':checked').length === $checks.length;
             $checks.prop('checked', !todosMarcados);
         },
 
         actionGuardar: function () {
-            if (this.subiendo) return;
+            if (this.guardando) return;
 
-            const nombre = (this.$el.find("#rc-ruta-nombre").val() || "").trim();
-            const descripcion = (this.$el.find("#rc-ruta-descripcion").val() || "").trim();
-            const fileInput = this.$el.find("#rc-ruta-file").get(0);
+            const nombre = (this.$el.find("#dl-documento-nombre").val() || "").trim();
+            const descripcion = (this.$el.find("#dl-documento-descripcion").val() || "").trim();
+            const fileInput = this.$el.find("#dl-documento-file").get(0);
             const file = fileInput && fileInput.files && fileInput.files[0];
 
-            const roles = this.$el.find(".rc-ruta-rol-checkbox:checked")
+            const roles = this.$el.find(".dl-documento-rol-checkbox:checked")
                 .map(function () { return $(this).val(); }).get();
 
             if (!nombre) {
                 Espo.Ui.error("El nombre es obligatorio");
-                return;
-            }
-
-            if (!file) {
-                Espo.Ui.error("Debes seleccionar un archivo");
                 return;
             }
 
@@ -123,32 +123,34 @@ define("rutas-capacitacion:views/modals/subir-ruta", ["views/modal"], function (
                 return;
             }
 
-            this.subirArchivo(nombre, descripcion, file, roles);
+            this.guardarCambios(nombre, descripcion, file, roles);
         },
 
-        subirArchivo: function (nombre, descripcion, file, roles) {
+        guardarCambios: function (nombre, descripcion, file, roles) {
             const self = this;
 
-            this.subiendo = true;
+            this.guardando = true;
             this.disableButton("guardar");
-            Espo.Ui.notify("Subiendo ruta...");
+            Espo.Ui.notify("Guardando cambios...");
 
             const formData = new FormData();
-            formData.append("file", file);
+            formData.append("id", this.documento.id);
             formData.append("nombre", nombre);
             formData.append("descripcion", descripcion);
             formData.append("roles", roles.join(","));
-            formData.append("tipo", "rutas");
+            if (file) {
+                formData.append("file", file);
+            }
 
             const xhr = new XMLHttpRequest();
-            xhr.open("POST", "api/v1/RutasCapacitacionRutas/action/crear", true);
+            xhr.open("POST", "api/v1/RutasCapacitacionRutas/action/actualizar", true);
 
             const token = (typeof Espo !== "undefined" && Espo.Ajax && Espo.Ajax.getCsrfToken)
                 ? Espo.Ajax.getCsrfToken() : null;
             if (token) xhr.setRequestHeader("X-Csrf-Token", token);
 
             xhr.onload = function () {
-                self.subiendo = false;
+                self.guardando = false;
                 self.enableButton("guardar");
 
                 let response;
@@ -160,16 +162,16 @@ define("rutas-capacitacion:views/modals/subir-ruta", ["views/modal"], function (
                 }
 
                 if (response.success) {
-                    self.trigger("subida", response.ruta);
+                    self.trigger("actualizado", response.ruta);
                 } else {
-                    Espo.Ui.error(response.error || "Error al subir la ruta");
+                    Espo.Ui.error(response.error || "Error al guardar los cambios");
                 }
             };
 
             xhr.onerror = function () {
-                self.subiendo = false;
+                self.guardando = false;
                 self.enableButton("guardar");
-                Espo.Ui.error("Error de conexión al subir la ruta");
+                Espo.Ui.error("Error de conexión al guardar los cambios");
             };
 
             xhr.send(formData);

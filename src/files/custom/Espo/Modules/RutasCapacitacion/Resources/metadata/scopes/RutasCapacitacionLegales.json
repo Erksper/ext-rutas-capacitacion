@@ -1,0 +1,15 @@
+{
+    "entity": true,
+    "layouts": false,
+    "tab": true,
+    "acl": "record",
+    "customizable": true,
+    "importable": false,
+    "notifications": false,
+    "stream": false,
+    "disabled": false,
+    "type": "Base",
+    "module": "RutasCapacitacion",
+    "object": true,
+    "isCustom": true
+}

@@ -1,0 +1,406 @@
+/* client/custom/modules/rutas-capacitacion/res/css/documentos-legales.css */
+
+:root {
+    --dl-primary: #B8A279;
+    --dl-primary-dark: #9D8B5F;
+    --dl-primary-light: #D4C19C;
+    --dl-danger: #e74c3c;
+    --dl-dark: #1A1A1A;
+    --dl-light: #F5F5F5;
+    --dl-border: #E6E6E6;
+    --dl-white: #FFFFFF;
+    --dl-text: #363438;
+    --dl-text-muted: #666666;
+}
+
+/* Contenedor de la página */
+.dl-list-container {
+    padding: 30px;
+    background: var(--dl-light);
+    min-height: 100vh;
+}
+
+/* Header */
+.dl-page-header {
+    background: var(--dl-white);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border: 1px solid var(--dl-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.dl-header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.dl-header-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--dl-primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 26px;
+}
+
+.dl-page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dl-dark);
+    margin: 0 0 4px 0;
+}
+
+.dl-page-subtitle {
+    color: var(--dl-text-muted);
+    font-size: 15px;
+    margin: 0;
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+.dl-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .dl-list-container { padding: 15px; }
+    .dl-page-title { font-size: 22px; }
+}
+
+/* Loading */
+.dl-loading {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.dl-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid var(--dl-border);
+    border-top-color: var(--dl-primary);
+    border-radius: 50%;
+    animation: dl-spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes dl-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Botones */
+.dl-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dl-btn-primary {
+    background: var(--dl-primary);
+    color: white;
+}
+.dl-btn-primary:hover {
+    background: var(--dl-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(184,162,121,0.3);
+}
+
+.dl-btn-secondary {
+    background: var(--dl-white);
+    color: var(--dl-text-muted);
+    border: 2px solid var(--dl-border);
+}
+.dl-btn-secondary:hover {
+    background: var(--dl-primary);
+    color: white;
+    border-color: var(--dl-primary);
+}
+
+/* Alertas */
+.dl-alert {
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.dl-alert-danger { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+
+/* Sin datos */
+.dl-no-data {
+    background: var(--dl-white);
+    border-radius: 12px;
+    padding: 60px 40px;
+    text-align: center;
+    border: 1px solid var(--dl-border);
+}
+.dl-no-data i {
+    font-size: 64px;
+    color: var(--dl-primary);
+    margin-bottom: 20px;
+    display: block;
+}
+.dl-no-data h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--dl-dark);
+    margin-bottom: 10px;
+}
+.dl-no-data p {
+    color: var(--dl-text-muted);
+    font-size: 16px;
+}
+
+.dl-empty-text {
+    color: var(--dl-text-muted);
+    font-style: italic;
+    font-size: 14px;
+}
+
+/* Grilla de rutas */
+.dl-documentos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.dl-documento-card {
+    background: var(--dl-white);
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border: 1px solid var(--dl-border);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: all 0.2s ease;
+}
+
+.dl-documento-card:hover {
+    box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+    transform: translateY(-2px);
+}
+
+.dl-documento-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.dl-documento-nombre {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--dl-dark);
+    margin-bottom: 4px;
+}
+
+.dl-documento-descripcion {
+    font-size: 13.5px;
+    color: var(--dl-text-muted);
+    line-height: 1.4;
+}
+
+.dl-documento-roles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.dl-documento-role-tag {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    background: var(--dl-light);
+    color: var(--dl-text-muted);
+    padding: 3px 9px;
+    border-radius: 20px;
+}
+
+.dl-documento-actions {
+    margin-top: auto;
+    display: flex;
+    gap: 8px;
+}
+
+.dl-documento-actions .dl-btn {
+    flex: 1;
+    justify-content: center;
+}
+
+.dl-documento-actions .dl-documento-edit-btn {
+    flex: 0 0 auto;
+    width: 42px;
+    padding: 0;
+}
+
+.dl-documento-sin-archivo {
+    color: var(--dl-text-muted);
+    font-size: 13px;
+    font-style: italic;
+    flex: 1;
+}
+
+/* Modal de subida / edición */
+.dl-modal-form .form-group {
+    margin-bottom: 18px;
+}
+
+.dl-modal-form label {
+    font-weight: 600;
+    color: var(--dl-text);
+    font-size: 13.5px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.dl-file-name {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--dl-primary-dark);
+    font-weight: 600;
+}
+
+/* Selector de roles en el modal */
+.dl-roles-selector-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.dl-roles-selector-header .dl-btn-link {
+    background: none;
+    border: none;
+    color: var(--dl-primary-dark);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+}
+
+.dl-roles-selector-header .dl-btn-link:hover {
+    text-decoration: underline;
+}
+
+.dl-roles-selector-lista {
+    display: block;
+    max-height: 220px;
+    overflow-y: auto;
+    border: 1px solid var(--dl-border);
+    border-radius: 8px;
+    padding: 6px;
+}
+
+.dl-rol-check-row {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--dl-text);
+}
+
+.dl-rol-check-row:hover {
+    background: var(--dl-light);
+}
+
+.dl-rol-check-row input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* Modal organizar / eliminar */
+.dl-organizar-hint {
+    font-size: 13px;
+    color: var(--dl-text-muted);
+    background: var(--dl-light);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+}
+
+.dl-organizar-lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dl-organizar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--dl-white);
+    border: 1px solid var(--dl-border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: grab;
+    transition: box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.dl-organizar-row:active {
+    cursor: grabbing;
+}
+
+.dl-organizar-row.dragging {
+    opacity: 0.4;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.dl-organizar-handle {
+    color: var(--dl-text-muted);
+    font-size: 15px;
+}
+
+.dl-organizar-nombre {
+    flex: 1;
+    font-weight: 600;
+    color: var(--dl-text);
+    font-size: 14px;
+}
+
+.dl-organizar-eliminar {
+    border: none;
+    background: transparent;
+    color: var(--dl-danger);
+    font-size: 15px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.dl-organizar-eliminar:hover {
+    background: rgba(231, 76, 60, 0.1);
+}

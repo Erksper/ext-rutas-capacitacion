@@ -5,6 +5,12 @@
             "len": 255,
             "required": true
         },
+        "tipo": {
+            "type": "enum",
+            "options": ["rutas", "legales"],
+            "default": "rutas",
+            "required": true
+        },
         "descripcion": {
             "type": "text"
         },

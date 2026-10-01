@@ -1,0 +1,17 @@
+{
+    "controller": "rutas-capacitacion:controllers/documentos-legales-lista",
+    "iconClass": "fas fa-file-contract",
+    "color": "#B8A279",
+    "checkForDuplicatesInQuickCreate": false,
+    "menu": {
+        "list": [
+            {
+                "label": "Documentos legales",
+                "link": "#RutasCapacitacionLegales",
+                "acl": "read",
+                "aclScope": "RutasCapacitacionLegales",
+                "iconClass": "fas fa-file-contract"
+            }
+        ]
+    }
+}

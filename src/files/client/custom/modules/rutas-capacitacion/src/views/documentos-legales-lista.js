@@ -1,9 +1,9 @@
-define("rutas-capacitacion:views/rutas-capacitacion-lista", ["view"], function (Dep) {
+define("rutas-capacitacion:views/documentos-legales-lista", ["view"], function (Dep) {
     return Dep.extend({
-        template: "rutas-capacitacion:rutas-capacitacion-lista",
+        template: "rutas-capacitacion:documentos-legales-lista",
 
         setup: function () {
-            this.rutas = [];
+            this.documentos = [];
             this.permisos = {
                 esAdmin: false,
                 esCasaNacional: false
@@ -27,11 +27,11 @@ define("rutas-capacitacion:views/rutas-capacitacion-lista", ["view"], function (
                         };
                     }
                     self.renderAcciones();
-                    self.cargarRutas();
+                    self.cargarDocumentos();
                 })
                 .catch(function () {
                     self.renderAcciones();
-                    self.cargarRutas();
+                    self.cargarDocumentos();
                 });
         },
 
@@ -40,7 +40,7 @@ define("rutas-capacitacion:views/rutas-capacitacion-lista", ["view"], function (
         },
 
         renderAcciones: function () {
-            const contenedor = this.$el.find('#rc-header-actions');
+            const contenedor = this.$el.find('#dl-header-actions');
             contenedor.empty();
 
             if (!this.puedeGestionar()) {
@@ -49,9 +49,9 @@ define("rutas-capacitacion:views/rutas-capacitacion-lista", ["view"], function (
 
             const self = this;
 
-            const btnSubir = $('<button class="rc-btn rc-btn-primary" data-action="subir-ruta">' +
+            const btnSubir = $('<button class="dl-btn dl-btn-primary" data-action="subir-documento">' +
                 '<i class="fas fa-upload"></i> Subir archivo</button>');
-            const btnOrganizar = $('<button class="rc-btn rc-btn-secondary" data-action="organizar-rutas">' +
+            const btnOrganizar = $('<button class="dl-btn dl-btn-secondary" data-action="organizar-documentos">' +
                 '<i class="fas fa-sort"></i> Organizar / Eliminar</button>');
 
             btnSubir.on('click', function () {
@@ -67,29 +67,29 @@ define("rutas-capacitacion:views/rutas-capacitacion-lista", ["view"], function (
         abrirModalSubir: function () {
             const self = this;
 
-            this.createView('modalSubirRuta', 'rutas-capacitacion:views/modals/subir-ruta', {}, function (view) {
+            this.createView('modalSubirDocumento', 'rutas-capacitacion:views/modals/subir-documento-legal', {}, function (view) {
                 view.render();
 
                 self.listenToOnce(view, 'subida', function () {
                     view.close();
-                    Espo.Ui.success('Ruta subida correctamente');
-                    self.cargarRutas();
+                    Espo.Ui.success('Documento subido correctamente');
+                    self.cargarDocumentos();
                 });
             });
         },
 
-        abrirModalEditar: function (ruta) {
+        abrirModalEditar: function (documento) {
             const self = this;
 
-            this.createView('modalEditarRuta', 'rutas-capacitacion:views/modals/editar-ruta', {
-                ruta: ruta
+            this.createView('modalEditarDocumento', 'rutas-capacitacion:views/modals/editar-documento-legal', {
+                documento: documento
             }, function (view) {
                 view.render();
 
                 self.listenToOnce(view, 'actualizado', function () {
                     view.close();
-                    Espo.Ui.success('Ruta actualizada correctamente');
-                    self.cargarRutas();
+                    Espo.Ui.success('Documento actualizado correctamente');
+                    self.cargarDocumentos();
                 });
             });
         },
@@ -97,19 +97,19 @@ define("rutas-capacitacion:views/rutas-capacitacion-lista", ["view"], function (
         abrirModalOrganizar: function () {
             const self = this;
 
-            this.createView('modalOrganizarRutas', 'rutas-capacitacion:views/modals/organizar-rutas', {
-                rutas: this.rutas
+            this.createView('modalOrganizarDocumentos', 'rutas-capacitacion:views/modals/organizar-documentos-legales', {
+                documentos: this.documentos
             }, function (view) {
                 view.render();
 
                 self.listenToOnce(view, 'actualizado', function () {
                     view.close();
-                    self.cargarRutas();
+                    self.cargarDocumentos();
                 });
             });
         },
 
-        cargarRutas: function () {
+        cargarDocumentos: function () {
             if (this.cargando) return;
 
             this.cargando = true;
@@ -117,15 +117,15 @@ define("rutas-capacitacion:views/rutas-capacitacion-lista", ["view"], function (
 
             const self = this;
 
-            Espo.Ajax.getRequest("RutasCapacitacionRutas/action/getLista", {tipo: 'rutas'})
+            Espo.Ajax.getRequest("RutasCapacitacionRutas/action/getLista", {tipo: 'legales'})
                 .then(function (response) {
                     self.cargando = false;
 
                     if (response.success) {
-                        self.rutas = response.data;
+                        self.documentos = response.data;
                         self.renderizarLista();
                     } else {
-                        self.mostrarError(response.error || "Error al cargar las rutas de capacitación");
+                        self.mostrarError(response.error || "Error al cargar los documentos legales");
                     }
                 })
                 .catch(function () {
@@ -135,68 +135,68 @@ define("rutas-capacitacion:views/rutas-capacitacion-lista", ["view"], function (
         },
 
         mostrarLoading: function () {
-            this.$el.find('#rc-lista-container').html(`
-                <div class="rc-loading">
-                    <div class="rc-spinner"></div>
-                    <p>Cargando rutas de capacitación...</p>
+            this.$el.find('#dl-lista-container').html(`
+                <div class="dl-loading">
+                    <div class="dl-spinner"></div>
+                    <p>Cargando documentos legales...</p>
                 </div>
             `);
         },
 
         mostrarError: function (mensaje) {
-            this.$el.find('#rc-lista-container').html(`
-                <div class="rc-alert rc-alert-danger">
+            this.$el.find('#dl-lista-container').html(`
+                <div class="dl-alert dl-alert-danger">
                     <i class="fas fa-exclamation-circle"></i> ${this.escapeHtml(mensaje)}
                 </div>
             `);
         },
 
         renderizarLista: function () {
-            const container = this.$el.find('#rc-lista-container');
+            const container = this.$el.find('#dl-lista-container');
             const self = this;
 
-            if (this.rutas.length === 0) {
+            if (this.documentos.length === 0) {
                 container.html(`
-                    <div class="rc-no-data">
-                        <i class="fas fa-graduation-cap"></i>
-                        <h3>No hay rutas de capacitación disponibles</h3>
+                    <div class="dl-no-data">
+                        <i class="fas fa-file-contract"></i>
+                        <h3>No hay documentos legales disponibles</h3>
                         <p>Aún no hay documentos visibles para tu rol</p>
                     </div>
                 `);
                 return;
             }
 
-            let html = '<div class="rc-rutas-grid">';
+            let html = '<div class="dl-documentos-grid">';
 
-            this.rutas.forEach(function (ruta) {
-                const icono = self.iconoParaTipo(ruta.archivoTipo, ruta.archivoNombre);
+            this.documentos.forEach(function (documento) {
+                const icono = self.iconoParaTipo(documento.archivoTipo, documento.archivoNombre);
                 const editBtn = self.puedeGestionar()
-                    ? `<button class="rc-btn rc-btn-secondary rc-ruta-edit-btn" data-id="${ruta.id}" title="Editar">
+                    ? `<button class="dl-btn dl-btn-secondary dl-documento-edit-btn" data-id="${documento.id}" title="Editar">
                            <i class="fas fa-pencil-alt"></i>
                        </button>`
                     : '';
 
                 html += `
-                    <div class="rc-ruta-card" data-id="${ruta.id}">
-                        <div class="rc-ruta-icon" style="background:${icono.bg};color:${icono.color};">
+                    <div class="dl-documento-card" data-id="${documento.id}">
+                        <div class="dl-documento-icon" style="background:${icono.bg};color:${icono.color};">
                             <i class="${icono.clase}"></i>
                         </div>
-                        <div class="rc-ruta-info">
-                            <div class="rc-ruta-nombre">${self.escapeHtml(ruta.nombre)}</div>
-                            ${ruta.descripcion
-                                ? `<div class="rc-ruta-descripcion">${self.escapeHtml(ruta.descripcion)}</div>`
+                        <div class="dl-documento-info">
+                            <div class="dl-documento-nombre">${self.escapeHtml(documento.nombre)}</div>
+                            ${documento.descripcion
+                                ? `<div class="dl-documento-descripcion">${self.escapeHtml(documento.descripcion)}</div>`
                                 : ''}
-                            ${self.puedeGestionar() && ruta.roles && ruta.roles.length
-                                ? `<div class="rc-ruta-roles">${ruta.roles.map(r =>
-                                    `<span class="rc-ruta-role-tag">${self.escapeHtml(r)}</span>`).join('')}</div>`
+                            ${self.puedeGestionar() && documento.roles && documento.roles.length
+                                ? `<div class="dl-documento-roles">${documento.roles.map(r =>
+                                    `<span class="dl-documento-role-tag">${self.escapeHtml(r)}</span>`).join('')}</div>`
                                 : ''}
                         </div>
-                        <div class="rc-ruta-actions">
-                            ${ruta.downloadUrl
-                                ? `<a href="${ruta.downloadUrl}" class="rc-btn rc-btn-primary" target="_blank">
+                        <div class="dl-documento-actions">
+                            ${documento.downloadUrl
+                                ? `<a href="${documento.downloadUrl}" class="dl-btn dl-btn-primary" target="_blank">
                                        <i class="fas fa-download"></i> Descargar
                                    </a>`
-                                : `<span class="rc-ruta-sin-archivo">Sin archivo</span>`}
+                                : `<span class="dl-documento-sin-archivo">Sin archivo</span>`}
                             ${editBtn}
                         </div>
                     </div>
@@ -207,11 +207,11 @@ define("rutas-capacitacion:views/rutas-capacitacion-lista", ["view"], function (
 
             container.html(html);
 
-            container.find('.rc-ruta-edit-btn').on('click', function (e) {
+            container.find('.dl-documento-edit-btn').on('click', function (e) {
                 e.preventDefault();
                 const id = $(this).data('id');
-                const ruta = self.rutas.find(function (r) { return r.id === id; });
-                if (ruta) self.abrirModalEditar(ruta);
+                const documento = self.documentos.find(function (d) { return d.id === id; });
+                if (documento) self.abrirModalEditar(documento);
             });
         },
 
@@ -245,7 +245,7 @@ define("rutas-capacitacion:views/rutas-capacitacion-lista", ["view"], function (
         },
 
         onRemove: function () {
-            this.$el.find('#rc-header-actions').off('click');
+            this.$el.find('#dl-header-actions').off('click');
         }
     });
 });
